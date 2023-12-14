@@ -2,18 +2,18 @@
 SynthDef("eerie", {arg out = 0, freq=300, pan = 0, rate=5, amp=0.2, gate=1;
 	var acco, snd;
 	acco = Env.adsr(
-		attackTime:0.2,
-		decayTime:0.8,
+		attackTime:0.5,
+		decayTime:0.10,
 		sustainLevel:0.3,
 		releaseTime:0.5,
 		peakLevel:2,
 		curve:-4.0,
 		bias:0).kr(gate: gate, doneAction:2);
 	snd = BRF.ar(
-		in: SinOscFB.ar(freq: [freq,100]));
+		in: SinOscFB.ar(freq: [freq,400]));
 	snd = snd*acco;
 	snd = Mix.ar(snd);
-	snd = BPF.ar(
+	snd = HPF.ar(
 		in: SinOscFB.ar(freq: freq));
 	Out.ar([0,1],Pan2.ar (snd, pan, amp));
 }).add;
@@ -62,26 +62,9 @@ Pbind(
 	\amp, 0.4,
 	\legato, 0.5,
 	\ctranspose, 0.1
-).play;
+).trace.play;
 }.fork;
 )
 
-a.stop;
-b.stop;
-c.stop;
 
-{SinOsc.ar ([100,200,300])}.scope.play;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*{SinOsc.ar ([100,200,300])}.scope.play;*/
